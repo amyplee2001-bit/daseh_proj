@@ -1,0 +1,114 @@
+# Code-a-thon Project Template
+
+This project is intended to help you apply your skills in R in a way that would be conducive for collaborating or creating reproducible analyses.
+
+
+## Data Used
+
+Identify a dataset to analyze. Remember that if you share the data you must **not violate any privacy restrictions**
+
+If you don't have your own data, options for places to find data are listed on https://daseh.org.
+
+You might start by setting up an R Project, importing your data, previewing the data, etc. 
+
+```{r}
+library(tidyverse)
+view(biopsy)
+
+```
+
+**describe** what your data looks like and **where** you got it. Identify what the variables and samples are, or point to a data dictionary. Describe how the data was originally created. 
+
+```{r}
+head(biopsy)
+
+dim(biopsy)
+
+#left off here day 1 and still figuring out data cleaning and or finalizing question of correlation between clump thickness or cell size and malignancy
+```
+
+
+# Data Cleaning/Wrangling
+
+Perform any data subsetting, cleaning, or manipulation methods that were described in this course on your data. Examples are: renaming the columns, recoding values, reshaping the data, filtering the data etc. 
+
+You might also research other methods to include here, especially if your data is very unique.
+
+```{r}
+names(biopsy) <- c("ID", "Clump_Thickness", "Cell_Size", "Cell_Shape",
+                    "Marginal_Adhesion", "Single_Epi_Cell_Size",
+                    "Bare_Nuclei", "Bland_Chromatin",
+                    "Normal_Nucleoli", "Mitoses", "Class")
+
+library(dplyr)
+
+biopsy |>
+  group_by(Class) |>
+  summarize(
+    mean_clump = mean(Clump_Thickness),
+    mean_cell_size = mean(Cell_Size),
+    n = n()
+  )
+
+cor(select(biopsy, where(is.numeric)))
+```
+
+
+# Data Visualization
+
+Create some visualizations of your data using the esquisse app or the ggplot2 package.
+
+```{r}
+#figure out regression or overall visualization of data to reflect correlation
+
+library(ggplot2)
+
+ggplot(biopsy, aes(x = Class,
+                   y = Clump_Thickness,
+                   fill = Class)) +
+  geom_boxplot() +
+  labs(
+    title = "Clump Thickness by Diagnosis",
+    x = "Diagnosis",
+    y = "Clump Thickness"
+  )
+
+ggplot(biopsy, aes(x = Class,
+                   y = Cell_Size,
+                   fill = Class)) +
+  geom_boxplot() +
+  labs(
+    title = "Cell Size by Diagnosis",
+    x = "Diagnosis",
+    y = "Cell Size"
+  )
+```
+
+
+# Data Analysis
+
+Perform a **simple analysis** of your data. This can involve summarizing the data to describe aspects about it (quartiles, means, range etc.) or a simple statistical test. 
+
+Don't forget to describe what analysis you performed and why. Provide some simple **interpretation** about what your analysis might indicate about your data.
+
+```{r}
+
+```
+
+
+# Please include additional sections as desired.
+
+```{r}
+
+```
+
+
+# Versions
+
+Include some information about the version of R and the packages you are using by running sessionInfo().
+
+```{r}
+sessionInfo()
+```
+
+Render your document to an html or pdf using the "Knit" button.
